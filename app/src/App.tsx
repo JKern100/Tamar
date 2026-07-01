@@ -2,6 +2,12 @@ import { useState } from 'react'
 import { dataset, questions, formulas } from './content'
 import { useStore } from './store'
 import { DOMAIN_HE } from './types'
+import Practice from './modes/Practice'
+import Formulas from './modes/Formulas'
+import Simulation from './modes/Simulation'
+import Review from './modes/Review'
+import Dashboard from './modes/Dashboard'
+import Settings from './modes/Settings'
 
 type View = 'home' | 'practice' | 'formulas' | 'simulation' | 'review' | 'dashboard' | 'settings'
 
@@ -46,12 +52,12 @@ export default function App() {
       <main className="main">
         <div className="content">
           {view === 'home' && <Home go={setView} />}
-          {view === 'practice' && <Placeholder title="מצב תרגול" />}
-          {view === 'formulas' && <Placeholder title="דף נוסחאות" />}
-          {view === 'simulation' && <Placeholder title="מצב סימולציה" />}
-          {view === 'review' && <Placeholder title="חזרה על טעויות" />}
-          {view === 'dashboard' && <Placeholder title="לוח התקדמות" />}
-          {view === 'settings' && <Placeholder title="הגדרות" />}
+          {view === 'practice' && <Practice />}
+          {view === 'formulas' && <Formulas />}
+          {view === 'simulation' && <Simulation />}
+          {view === 'review' && <Review />}
+          {view === 'dashboard' && <Dashboard />}
+          {view === 'settings' && <Settings />}
         </div>
       </main>
     </div>
@@ -112,16 +118,6 @@ function Home({ go }: { go: (v: View) => void }) {
           </div>
         ))}
       </div>
-    </div>
-  )
-}
-
-function Placeholder({ title }: { title: string }) {
-  return (
-    <div className="card center muted" style={{ padding: '60px 20px' }}>
-      <div style={{ fontSize: 40, marginBottom: 10 }}>🚧</div>
-      <h2>{title}</h2>
-      <p>המסך הזה בבנייה.</p>
     </div>
   )
 }
