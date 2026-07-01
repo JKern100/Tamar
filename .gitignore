@@ -1,0 +1,12 @@
+# Copyrighted extracted content and working data — NEVER commit to this public repo.
+# The extracted questions/explanations/formulas are the copyrighted material in
+# text form; they get bundled into the private app build, not published here.
+/data/
+/ingestion/out/
+*.extracted.txt
+*.pdf
+
+# Python
+__pycache__/
+*.pyc
+.venv/
