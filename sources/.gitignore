@@ -1,3 +1,6 @@
-# Never commit the copyrighted Campus IL PDFs themselves — personal study use only.
-pdfs/
+# Copyrighted Campus IL PDFs — personal study use only; keep this repo PRIVATE.
+# Per the goal "add all catalogue PDFs to the repo", the official PDFs live in
+# sources/pdfs/ and ARE tracked there. Stray PDFs anywhere else stay ignored.
 *.pdf
+!/pdfs/
+!/pdfs/*.pdf
