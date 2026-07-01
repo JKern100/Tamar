@@ -1,0 +1,119 @@
+{
+  "isDemo": true,
+  "generatedAt": "demo",
+  "sourceCount": 0,
+  "questions": [
+    {
+      "id": "demo-q-quant-1",
+      "origin": "official",
+      "domain": "quantitative",
+      "topic": "אחוזים",
+      "difficulty": "easy",
+      "stem": "מחיר מוצר עלה ב-20% ואז ירד ב-20%. מה השינוי הכולל במחיר?",
+      "choices": ["ללא שינוי", "ירידה של 4%", "עלייה של 4%", "ירידה של 2%"],
+      "correctIndex": 1,
+      "explanation": { "text": "נניח מחיר התחלתי 100. לאחר עלייה של 20%: 120. לאחר ירידה של 20% מ-120: 96. סך הכול ירידה של 4%.", "origin": "official" },
+      "citation": { "pdfTitle": "תוכן הדגמה — יוחלף בתוכן רשמי", "page": 0 },
+      "verified": false
+    },
+    {
+      "id": "demo-q-quant-2",
+      "origin": "official",
+      "domain": "quantitative",
+      "topic": "ממוצעים",
+      "difficulty": "medium",
+      "stem": "הממוצע של 5 מספרים הוא 12. אם מוסיפים מספר שישי והממוצע הופך ל-14, מהו המספר השישי?",
+      "choices": ["24", "16", "20", "26"],
+      "correctIndex": 0,
+      "explanation": { "text": "סכום 5 המספרים: 5×12=60. סכום 6 המספרים: 6×14=84. המספר השישי: 84−60=24.", "origin": "official" },
+      "citation": { "pdfTitle": "תוכן הדגמה — יוחלף בתוכן רשמי", "page": 0 },
+      "verified": false
+    },
+    {
+      "id": "demo-q-verbal-1",
+      "origin": "official",
+      "domain": "verbal",
+      "topic": "אנלוגיות",
+      "difficulty": "medium",
+      "stem": "השלימו את האנלוגיה: רופא : מרפאה כמו מורה : ___",
+      "choices": ["ספר", "כיתה", "תלמיד", "לוח"],
+      "correctIndex": 1,
+      "explanation": { "text": "רופא פועל במרפאה, כפי שמורה פועל בכיתה — יחס של בעל מקצוע למקום עבודתו.", "origin": "official" },
+      "citation": { "pdfTitle": "תוכן הדגמה — יוחלף בתוכן רשמי", "page": 0 },
+      "verified": false
+    },
+    {
+      "id": "demo-q-eng-1",
+      "origin": "official",
+      "domain": "english",
+      "topic": "Sentence Completion",
+      "difficulty": "easy",
+      "stem": "The scientist's argument was so ___ that no one could find a flaw in it.",
+      "choices": ["vague", "cogent", "trivial", "hostile"],
+      "correctIndex": 1,
+      "ltr": true,
+      "explanation": { "text": "\"Cogent\" means clear and convincing — fitting an argument with no flaws.", "origin": "official" },
+      "citation": { "pdfTitle": "תוכן הדגמה — יוחלף בתוכן רשמי", "page": 0 },
+      "verified": false
+    }
+  ],
+  "formulas": [
+    {
+      "id": "demo-f-percent",
+      "domain": "quantitative",
+      "topic": "אחוזים",
+      "name": "שינוי באחוזים",
+      "formula": "מחיר סופי = מחיר התחלתי × (1 ± אחוז/100)",
+      "explanation": "לעלייה מוסיפים את האחוז, לירידה מחסירים. עלייה ואז ירידה באותו אחוז אינן מבטלות זו את זו.",
+      "example": "100 בעלייה של 20% ואז ירידה של 20% = 100×1.2×0.8 = 96.",
+      "origin": "official",
+      "citation": { "pdfTitle": "תוכן הדגמה — יוחלף בתוכן רשמי", "page": 0 },
+      "verified": false
+    },
+    {
+      "id": "demo-f-average",
+      "domain": "quantitative",
+      "topic": "ממוצעים",
+      "name": "ממוצע",
+      "formula": "ממוצע = סכום האיברים ÷ מספר האיברים",
+      "explanation": "מהממוצע אפשר לחלץ את הסכום: סכום = ממוצע × מספר האיברים.",
+      "origin": "official",
+      "citation": { "pdfTitle": "תוכן הדגמה — יוחלף בתוכן רשמי", "page": 0 },
+      "verified": false
+    },
+    {
+      "id": "demo-f-pyth",
+      "domain": "quantitative",
+      "topic": "גיאומטריה",
+      "name": "משפט פיתגורס",
+      "formula": "a² + b² = c²",
+      "explanation": "במשולש ישר-זווית, סכום ריבועי הניצבים שווה לריבוע היתר (c).",
+      "example": "ניצבים 3 ו-4 → יתר = √(9+16) = 5.",
+      "origin": "official",
+      "citation": { "pdfTitle": "תוכן הדגמה — יוחלף בתוכן רשמי", "page": 0 },
+      "verified": false
+    },
+    {
+      "id": "demo-f-powers",
+      "domain": "quantitative",
+      "topic": "חזקות ושורשים",
+      "name": "כללי חזקות",
+      "formula": "aᵐ × aⁿ = aᵐ⁺ⁿ ;  aᵐ ÷ aⁿ = aᵐ⁻ⁿ ;  (aᵐ)ⁿ = aᵐⁿ",
+      "explanation": "בכפל חזקות בעלות אותו בסיס מחברים מעריכים; בחילוק מחסירים; בהעלאה בחזקה מכפילים.",
+      "origin": "official",
+      "citation": { "pdfTitle": "תוכן הדגמה — יוחלף בתוכן רשמי", "page": 0 },
+      "verified": false
+    },
+    {
+      "id": "demo-f-prob",
+      "domain": "quantitative",
+      "topic": "הסתברות",
+      "name": "הסתברות בסיסית",
+      "formula": "P(מאורע) = מספר התוצאות הרצויות ÷ מספר התוצאות האפשריות",
+      "explanation": "בהנחת התפלגות אחידה. להסתברות של שני מאורעות בלתי-תלויים מכפילים.",
+      "origin": "official",
+      "citation": { "pdfTitle": "תוכן הדגמה — יוחלף בתוכן רשמי", "page": 0 },
+      "verified": false
+    }
+  ]
+}
