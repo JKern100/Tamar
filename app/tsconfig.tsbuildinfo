@@ -1,1 +1,0 @@
-{"root":["./src/App.tsx","./src/ai.ts","./src/main.tsx","./src/store.ts","./src/types.ts","./src/ui.tsx","./src/components/QuestionCard.tsx","./src/content/index.ts","./src/modes/Dashboard.tsx","./src/modes/Formulas.tsx","./src/modes/Practice.tsx","./src/modes/Review.tsx","./src/modes/Settings.tsx","./src/modes/Simulation.tsx","./src/test/setup.ts"],"version":"5.9.3"}
