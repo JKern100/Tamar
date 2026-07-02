@@ -34,7 +34,8 @@
 
 * { box-sizing: border-box; }
 
-html, body, #root { height: 100%; margin: 0; }
+html { height: 100%; }
+body, #root { min-height: 100%; margin: 0; }
 
 body {
   direction: rtl;
@@ -51,7 +52,7 @@ a { color: var(--primary); }
 button { font-family: inherit; }
 
 /* ---------- Layout ---------- */
-.app { display: flex; min-height: 100%; }
+.app { display: flex; min-height: 100vh; min-height: 100dvh; }
 
 .sidebar {
   width: 248px;
