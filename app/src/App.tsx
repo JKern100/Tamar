@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { dataset, questions, formulas } from './content'
+import EasterEgg from './components/EasterEgg'
 import { useStore } from './store'
 import { DOMAIN_HE } from './types'
 import Practice from './modes/Practice'
@@ -26,8 +27,10 @@ const NAV: { view: View; label: string; ico: string }[] = [
 
 export default function App() {
   const [view, setView] = useState<View>('home')
+  const [egg, setEgg] = useState(false)
   return (
     <div className="app">
+      {egg && <EasterEgg onClose={() => setEgg(false)} />}
       <nav className="sidebar">
         <div className="brand">
           <div className="logo">פ</div>
@@ -54,7 +57,7 @@ export default function App() {
 
       <main className="main">
         <div className="content">
-          {view === 'home' && <Home go={setView} />}
+          {view === 'home' && <Home go={setView} onSecret={() => setEgg(true)} />}
           {view === 'practice' && <Practice />}
           {view === 'formulas' && <Formulas />}
           {view === 'examples' && <Examples />}
@@ -68,8 +71,13 @@ export default function App() {
   )
 }
 
-function Home({ go }: { go: (v: View) => void }) {
+function Home({ go, onSecret }: { go: (v: View) => void; onSecret: () => void }) {
   const { attempts } = useStore()
+  const taps = useRef(0)
+  const secretTap = () => {
+    taps.current += 1
+    if (taps.current >= 5) { taps.current = 0; onSecret() }
+  }
   const answered = attempts.length
   const correct = attempts.filter((a) => a.correct).length
   const accuracy = answered ? Math.round((correct / answered) * 100) : 0
@@ -87,7 +95,9 @@ function Home({ go }: { go: (v: View) => void }) {
       )}
 
       <div className="card hero">
-        <h1 style={{ fontSize: 28 }}>שלום 👋 בואי נתכונן לפסיכומטרי</h1>
+        <h1 style={{ fontSize: 28 }}>
+          שלום <span className="wave" onClick={secretTap} role="img" aria-label="נפנוף">👋</span> בואי נתכונן לפסיכומטרי
+        </h1>
         <p className="muted" style={{ maxWidth: 560 }}>
           תרגול לפי נושא ורמת קושי, דף נוסחאות מלא, סימולציות ולוח התקדמות — הכול בעברית, ומבוסס על חומרי
           המקור הרשמיים של Campus IL.

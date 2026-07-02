@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import QuestionCard from '../components/QuestionCard'
 import Examples from '../modes/Examples'
+import EasterEgg from '../components/EasterEgg'
 import { CitationView, SourceBadge } from '../ui'
 import type { Question } from '../types'
 
@@ -84,6 +85,16 @@ describe('worked examples mode', () => {
     fireEvent.click(screen.getByText('הצג פתרון'))
     expect(screen.getByText(/פיתגורס/)).toBeInTheDocument()
     expect(screen.getByRole('img', { name: /משולש/ })).toBeInTheDocument() // figure rendered
+  })
+})
+
+describe('hidden surprise', () => {
+  it('asks who the best dad is, with every answer correct', () => {
+    render(<EasterEgg onClose={() => {}} />)
+    expect(screen.getByText('מי האבא הטוב ביותר בעולם?')).toBeInTheDocument()
+    expect(screen.getAllByText('אבא שעיה')).toHaveLength(4)
+    fireEvent.click(screen.getAllByText('אבא שעיה')[0])
+    expect(screen.getByText('כל תשובה נכונה!')).toBeInTheDocument()
   })
 })
 
