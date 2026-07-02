@@ -7,10 +7,83 @@ as official, and answer indices must be in range.
 """
 import base64
 import json
+import re
 import fitz  # PyMuPDF
 
 VALID_DOMAINS = {"quantitative", "verbal", "english", "writing"}
 VALID_DIFF = {"easy", "medium", "hard"}
+
+# --- RTL bracket repair -----------------------------------------------------
+# A Hebrew parenthetical gloss captured in visual (right-to-left) order comes out
+# with its brackets mirrored: "(שחצן)" is stored as ")שחצן(". Left uncorrected it
+# renders backwards in the app. We repair ONLY strings that are "reversed-dominant"
+# — where a ')' appears before any matching '(' (running depth goes negative). That
+# never happens in correctly-stored text such as "(x−3) שווה (x+4)", so those are
+# left untouched. Within a reversed string we flip only isolated ")X(" islands that
+# do not span a line break, which keeps numbered list markers like "(1) … (2)" on
+# separate lines intact.
+_REVERSED_ISLAND = re.compile(r"\)([^()\n]+)\(")
+
+
+def _is_reversed_dominant(s: str) -> bool:
+    depth = 0
+    for ch in s:
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+            if depth < 0:
+                return True
+    return False
+
+
+def fix_mirrored_parentheses(text: str) -> str:
+    """Repair RTL-mirrored parenthetical brackets ')word(' -> '(word)'.
+
+    Safe by construction: touches only reversed-dominant strings and only flips
+    isolated ')…(' islands that stay on one line. Correctly-stored math such as
+    '(x−3) שווה (x+4)' and multi-line numbered lists are left unchanged.
+    """
+    if not text or not _is_reversed_dominant(text):
+        return text
+    return _REVERSED_ISLAND.sub(r"(\1)", text)
+
+
+def normalize_text_fields(dataset: dict) -> int:
+    """Apply fix_mirrored_parentheses across every human-readable text field.
+
+    Returns the number of fields changed. Run at assembly time so the shipped
+    dataset never carries mirrored brackets, regardless of how a fragment was
+    produced (PDF extraction, visual transcription, etc.).
+    """
+    n = 0
+
+    def apply(obj: dict, key: str) -> None:
+        nonlocal n
+        v = obj.get(key)
+        if isinstance(v, str):
+            nv = fix_mirrored_parentheses(v)
+            if nv != v:
+                obj[key] = nv
+                n += 1
+
+    for q in dataset.get("questions", []):
+        apply(q, "stem")
+        choices = q.get("choices")
+        if isinstance(choices, list):
+            for i, c in enumerate(choices):
+                if isinstance(c, str):
+                    nc = fix_mirrored_parentheses(c)
+                    if nc != c:
+                        choices[i] = nc
+                        n += 1
+        expl = q.get("explanation")
+        if isinstance(expl, dict):
+            apply(expl, "text")
+    for f in dataset.get("formulas", []):
+        for k in ("name", "formula", "explanation", "example"):
+            apply(f, k)
+    return n
 
 
 def extract_pages(pdf_bytes: bytes) -> list[str]:

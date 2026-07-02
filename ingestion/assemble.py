@@ -9,7 +9,7 @@ Each fragment: {"questions": [...], "formulas": [...]} (either key optional).
 import json
 import sys
 from datetime import datetime, timezone
-from lib import validate_dataset
+from lib import validate_dataset, normalize_text_fields
 
 
 def main() -> None:
@@ -31,10 +31,11 @@ def main() -> None:
         "questions": questions,
         "formulas": formulas,
     }
+    fixed = normalize_text_fields(dataset)  # repair RTL-mirrored brackets
     validate_dataset(dataset)  # raises on any problem
     with open(out, "w", encoding="utf-8") as fh:
         json.dump(dataset, fh, ensure_ascii=False, indent=2)
-    print(f"OK — {len(questions)} questions, {len(formulas)} formulas -> {out}")
+    print(f"OK — {len(questions)} questions, {len(formulas)} formulas, {fixed} bracket-fix(es) -> {out}")
 
 
 if __name__ == "__main__":
