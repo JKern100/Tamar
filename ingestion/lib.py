@@ -119,6 +119,10 @@ def validate_question(q: dict) -> None:
         raise ValidationError("official question must carry a citation")
     if q["origin"] == "ai" and q.get("citation"):
         raise ValidationError("AI question must not carry an official citation")
+    fig = q.get("figure")
+    if fig is not None:
+        if not isinstance(fig, dict) or not isinstance(fig.get("svg"), str) or "<svg" not in fig["svg"]:
+            raise ValidationError(f"figure must be an object with inline SVG markup: {q['id']}")
 
 
 def validate_formula(f: dict) -> None:

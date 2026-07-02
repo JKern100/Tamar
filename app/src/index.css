@@ -197,6 +197,20 @@ label.field > span { display: block; font-size: 13.5px; color: var(--text-soft);
 .timer { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 20px; }
 .timer.low { color: var(--bad); }
 
+/* Question diagrams (inline SVG), rendered LTR and size-constrained. */
+.figure {
+  direction: ltr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2px 0 18px;
+  padding: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.figure svg { max-width: 100%; height: auto; }
+
 @media (max-width: 720px) {
   .app { flex-direction: column; }
   .sidebar { width: 100%; height: auto; position: static; flex-direction: row; flex-wrap: wrap; border-inline-start: none; border-bottom: 1px solid var(--border); }

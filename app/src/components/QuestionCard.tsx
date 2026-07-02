@@ -37,6 +37,17 @@ export default function QuestionCard({ question: q, selected, onSelect, reveal, 
         {q.stem}
       </div>
 
+      {q.figure && (
+        // SVG is trusted build-time content (from our own extraction), not runtime
+        // user input. Rendered LTR because SVG coordinates are left-to-right.
+        <div
+          className="figure"
+          role="img"
+          aria-label={q.figure.alt || 'תרשים לשאלה'}
+          dangerouslySetInnerHTML={{ __html: q.figure.svg }}
+        />
+      )}
+
       <div className="stack" style={{ direction: dir }}>
         {q.choices.map((choice, i) => {
           let cls = 'choice'

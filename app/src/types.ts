@@ -37,6 +37,17 @@ export interface Explanation {
   citation?: Citation
 }
 
+/**
+ * A diagram that belongs to a question, stored as self-contained inline SVG.
+ * SVG keeps the app fully offline (no image files), scales crisply on any
+ * screen, and adds almost nothing to the bundle. `alt` is a Hebrew text
+ * description shown to screen readers and used as a fallback.
+ */
+export interface Figure {
+  svg: string
+  alt?: string
+}
+
 export interface Question {
   id: string
   origin: Origin
@@ -45,6 +56,8 @@ export interface Question {
   difficulty?: Difficulty
   /** Question stem. May contain English for original English questions. */
   stem: string
+  /** Optional diagram (geometry etc.), rendered between the stem and choices. */
+  figure?: Figure
   /** Original answer choices, preserved verbatim for official questions. */
   choices: string[]
   correctIndex: number

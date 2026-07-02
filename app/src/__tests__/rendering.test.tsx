@@ -59,6 +59,22 @@ describe('citations', () => {
   })
 })
 
+describe('figures', () => {
+  it('renders an inline SVG diagram with an accessible Hebrew label', () => {
+    const withFig: Question = {
+      ...official, id: 'qf',
+      figure: { svg: '<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="4"/></svg>', alt: 'עיגול' },
+    }
+    const { container } = render(<QuestionCard question={withFig} selected={null} onSelect={() => {}} reveal={false} />)
+    expect(container.querySelector('.figure svg')).toBeTruthy()
+    expect(screen.getByRole('img', { name: 'עיגול' })).toBeInTheDocument()
+  })
+  it('renders no figure element when a question has none', () => {
+    const { container } = render(<QuestionCard question={official} selected={null} onSelect={() => {}} reveal={false} />)
+    expect(container.querySelector('.figure')).toBeNull()
+  })
+})
+
 describe('RTL / direction', () => {
   it('renders Hebrew stems RTL and English stems LTR', () => {
     const { rerender } = render(<QuestionCard question={official} selected={null} onSelect={() => {}} reveal={false} />)

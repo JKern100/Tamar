@@ -52,6 +52,15 @@ class TestValidation(unittest.TestCase):
         with self.assertRaises(ValidationError):
             validate_dataset(data)
 
+    def test_valid_figure_passes(self):
+        q = dict(VALID_Q); q["figure"] = {"svg": "<svg viewBox='0 0 1 1'></svg>", "alt": "משולש"}
+        validate_question(q)  # should not raise
+
+    def test_figure_without_svg_rejected(self):
+        q = dict(VALID_Q); q["figure"] = {"alt": "no svg here"}
+        with self.assertRaises(ValidationError):
+            validate_question(q)
+
     def test_dataset_valid(self):
         ai_q = {"id": "a1", "origin": "ai", "domain": "english", "topic": "Vocab",
                 "stem": "?", "choices": ["a", "b"], "correctIndex": 0, "relatedOfficialId": "q1"}
