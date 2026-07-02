@@ -182,7 +182,7 @@ export default function Practice() {
             <button className="btn" onClick={makeSimilar} disabled={aiLoading}>
               {aiLoading ? 'יוצר…' : '🤖 צור שאלה דומה בעזרת AI'}
             </button>
-            <button className="btn primary" onClick={next}>{idx + 1 < quiz.length ? 'השאלה הבאה →' : 'סיום'}</button>
+            <button className="btn primary" onClick={next}>{idx + 1 < quiz.length ? 'השאלה הבאה ←' : 'סיום'}</button>
           </div>
           {aiError && <p className="small" style={{ color: 'var(--bad)', marginTop: 10 }}>{aiError}</p>}
         </div>

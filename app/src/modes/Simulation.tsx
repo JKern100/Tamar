@@ -188,7 +188,7 @@ export default function Simulation() {
             ? <button className="btn" onClick={() => setQIdx(qIdx + 1)}>הבאה ←</button>
             : <span />}
           <button className="btn primary" onClick={submitSection}>
-            {sIdx + 1 < sections.length ? 'סיום מקטע →' : 'סיום סימולציה'}
+            {sIdx + 1 < sections.length ? 'סיום מקטע ←' : 'סיום סימולציה'}
           </button>
         </div>
       </div>

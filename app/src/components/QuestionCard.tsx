@@ -53,7 +53,7 @@ export default function QuestionCard({ question: q, selected, onSelect, reveal, 
               style={{ unicodeBidi: 'plaintext' }}
             >
               <span className="marker">{i + 1}</span>
-              <span>{choice}</span>
+              <span style={{ unicodeBidi: 'plaintext' }}>{choice}</span>
             </button>
           )
         })}
