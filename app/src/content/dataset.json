@@ -115,5 +115,23 @@
       "citation": { "pdfTitle": "תוכן הדגמה — יוחלף בתוכן רשמי", "page": 0 },
       "verified": false
     }
+  ],
+  "examples": [
+    {
+      "id": "demo-ex-1",
+      "origin": "official",
+      "domain": "quantitative",
+      "topic": "גיאומטריה",
+      "difficulty": "easy",
+      "stem": "בסרטוט שלפניך משולש ישר-זווית שאורכי ניצביו 6 ו-8. מהו אורך היתר?",
+      "figure": {
+        "svg": "<svg viewBox='0 0 230 175' width='230' height='175' xmlns='http://www.w3.org/2000/svg' font-family='system-ui,Arial' font-size='16'><polygon points='35,145 200,145 35,35' fill='#eff6ff' stroke='#1e293b' stroke-width='2'/><rect x='35' y='131' width='14' height='14' fill='none' stroke='#1e293b' stroke-width='1.5'/><text x='117' y='166' text-anchor='middle'>8</text><text x='20' y='94' text-anchor='middle'>6</text><text x='128' y='83'>?</text></svg>",
+        "alt": "משולש ישר-זווית שניצביו 6 ו-8 והיתר מסומן בסימן שאלה"
+      },
+      "answer": "10",
+      "explanation": { "text": "לפי משפט פיתגורס: היתר = שורש(6²+8²) = שורש(36+64) = שורש(100) = 10.", "origin": "official" },
+      "citation": { "pdfTitle": "תוכן הדגמה — יוחלף בתוכן רשמי", "page": 0 },
+      "verified": false
+    }
   ]
 }

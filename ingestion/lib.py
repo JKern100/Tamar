@@ -80,6 +80,12 @@ def normalize_text_fields(dataset: dict) -> int:
         expl = q.get("explanation")
         if isinstance(expl, dict):
             apply(expl, "text")
+    for e in dataset.get("examples", []):
+        apply(e, "stem")
+        apply(e, "answer")
+        expl = e.get("explanation")
+        if isinstance(expl, dict):
+            apply(expl, "text")
     for f in dataset.get("formulas", []):
         for k in ("name", "formula", "explanation", "example"):
             apply(f, k)
@@ -125,6 +131,57 @@ def validate_question(q: dict) -> None:
             raise ValidationError(f"figure must be an object with inline SVG markup: {q['id']}")
 
 
+def validate_example(e: dict) -> None:
+    for f in ("id", "origin", "domain", "topic", "stem", "answer", "explanation"):
+        if f not in e:
+            raise ValidationError(f"example missing field: {f}")
+    if e["domain"] not in VALID_DOMAINS:
+        raise ValidationError(f"bad example domain: {e['domain']}")
+    if not str(e.get("answer") or "").strip():
+        raise ValidationError(f"example must carry a non-empty answer: {e['id']}")
+    if e["origin"] == "official" and not e.get("citation"):
+        raise ValidationError("official example must carry a citation")
+    fig = e.get("figure")
+    if fig is not None and (not isinstance(fig, dict) or "<svg" not in (fig.get("svg") or "")):
+        raise ValidationError(f"example figure must be inline SVG: {e['id']}")
+
+
+def _question_to_example(q: dict) -> dict:
+    """Map a figure question that has no answer choices to a worked example."""
+    ex = {
+        "id": q["id"],
+        "origin": q.get("origin", "official"),
+        "domain": q["domain"],
+        "topic": q["topic"],
+        "stem": q["stem"],
+        "answer": str(q.get("correctValue") or q.get("answer") or "").strip(),
+        "explanation": q.get("explanation") or {"text": "", "origin": q.get("origin", "official")},
+        "verified": bool(q.get("verified", False)),
+    }
+    if q.get("difficulty"):
+        ex["difficulty"] = q["difficulty"]
+    if q.get("figure"):
+        ex["figure"] = q["figure"]
+    if q.get("citation"):
+        ex["citation"] = q["citation"]
+    return ex
+
+
+def partition_examples(questions: list) -> tuple[list, list]:
+    """Split a question list into (real multiple-choice questions, worked examples).
+
+    A question with a figure but no answer choices can't be a fair MC item, so it
+    becomes a worked example instead of ever getting fabricated distractors.
+    """
+    real, examples = [], []
+    for q in questions:
+        if q.get("figure") and not q.get("choices"):
+            examples.append(_question_to_example(q))
+        else:
+            real.append(q)
+    return real, examples
+
+
 def validate_formula(f: dict) -> None:
     for k in ("id", "domain", "topic", "name", "formula", "explanation", "origin"):
         if k not in f:
@@ -142,6 +199,11 @@ def validate_dataset(data: dict) -> bool:
         if q["id"] in seen:
             raise ValidationError(f"duplicate question id: {q['id']}")
         seen.add(q["id"])
+    for e in data.get("examples", []):
+        validate_example(e)
+        if e["id"] in seen:
+            raise ValidationError(f"duplicate id (example vs question): {e['id']}")
+        seen.add(e["id"])
     for f in data["formulas"]:
         validate_formula(f)
     return True

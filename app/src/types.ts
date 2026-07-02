@@ -88,6 +88,27 @@ export interface FormulaEntry {
   verified?: boolean
 }
 
+/**
+ * An official worked example: a real exam problem (often with a figure) shown
+ * with its full step-by-step solution instead of multiple-choice answers. Used
+ * for figure/geometry questions whose original four options aren't available in
+ * the source, so no choices are ever fabricated.
+ */
+export interface WorkedExample {
+  id: string
+  origin: Origin
+  domain: Domain
+  topic: string
+  difficulty?: Difficulty
+  stem: string
+  figure?: Figure
+  /** The correct result (value or expression), e.g. "10" or "12√3+12". */
+  answer: string
+  explanation: Explanation
+  citation?: Citation
+  verified?: boolean
+}
+
 export interface Dataset {
   /** True when the bundled data is the placeholder demo, not real official content. */
   isDemo: boolean
@@ -95,6 +116,8 @@ export interface Dataset {
   sourceCount?: number
   questions: Question[]
   formulas: FormulaEntry[]
+  /** Official worked examples (problem + figure + full solution, no MC choices). */
+  examples?: WorkedExample[]
 }
 
 // ---------- Progress / persistence ----------

@@ -4,17 +4,20 @@ import { useStore } from './store'
 import { DOMAIN_HE } from './types'
 import Practice from './modes/Practice'
 import Formulas from './modes/Formulas'
+import Examples from './modes/Examples'
 import Simulation from './modes/Simulation'
 import Review from './modes/Review'
 import Dashboard from './modes/Dashboard'
 import Settings from './modes/Settings'
+import { examples } from './content'
 
-type View = 'home' | 'practice' | 'formulas' | 'simulation' | 'review' | 'dashboard' | 'settings'
+type View = 'home' | 'practice' | 'formulas' | 'examples' | 'simulation' | 'review' | 'dashboard' | 'settings'
 
 const NAV: { view: View; label: string; ico: string }[] = [
   { view: 'home', label: 'בית', ico: '🏠' },
   { view: 'practice', label: 'תרגול', ico: '✏️' },
   { view: 'formulas', label: 'דף נוסחאות', ico: '📐' },
+  ...(examples.length ? [{ view: 'examples' as View, label: 'דוגמאות פתורות', ico: '🔷' }] : []),
   { view: 'simulation', label: 'סימולציה', ico: '⏱️' },
   { view: 'review', label: 'חזרה על טעויות', ico: '🔁' },
   { view: 'dashboard', label: 'לוח התקדמות', ico: '📊' },
@@ -54,6 +57,7 @@ export default function App() {
           {view === 'home' && <Home go={setView} />}
           {view === 'practice' && <Practice />}
           {view === 'formulas' && <Formulas />}
+          {view === 'examples' && <Examples />}
           {view === 'simulation' && <Simulation />}
           {view === 'review' && <Review />}
           {view === 'dashboard' && <Dashboard />}

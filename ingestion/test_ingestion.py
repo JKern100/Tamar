@@ -4,6 +4,7 @@ import fitz
 from lib import (
     extract_pages, validate_question, validate_formula, validate_dataset, ValidationError,
     fix_mirrored_parentheses, normalize_text_fields,
+    validate_example, partition_examples,
 )
 
 
@@ -65,6 +66,48 @@ class TestValidation(unittest.TestCase):
         ai_q = {"id": "a1", "origin": "ai", "domain": "english", "topic": "Vocab",
                 "stem": "?", "choices": ["a", "b"], "correctIndex": 0, "relatedOfficialId": "q1"}
         self.assertTrue(validate_dataset({"questions": [dict(VALID_Q), ai_q], "formulas": []}))
+
+
+EX = {
+    "id": "e1", "origin": "official", "domain": "quantitative", "topic": "גיאומטריה",
+    "stem": "מה אורך היתר?", "answer": "10",
+    "explanation": {"text": "פיתגורס", "origin": "official"},
+    "citation": {"pdfTitle": "סימולציה", "page": 3},
+}
+
+
+class TestExamples(unittest.TestCase):
+    def test_valid_example_passes(self):
+        validate_example(dict(EX))
+
+    def test_example_requires_nonempty_answer(self):
+        e = dict(EX); e["answer"] = "  "
+        with self.assertRaises(ValidationError):
+            validate_example(e)
+
+    def test_official_example_requires_citation(self):
+        e = dict(EX); e.pop("citation")
+        with self.assertRaises(ValidationError):
+            validate_example(e)
+
+    def test_partition_converts_figure_without_choices(self):
+        q_fig = {
+            "id": "f1", "origin": "official", "domain": "quantitative", "topic": "גיאומטריה",
+            "stem": "?", "figure": {"svg": "<svg></svg>"}, "correctValue": "10",
+            "explanation": {"text": "x", "origin": "official"}, "citation": {"pdfTitle": "y"}, "verified": True,
+        }
+        q_mc = dict(VALID_Q); q_mc["figure"] = {"svg": "<svg></svg>"}  # MC-with-figure stays a question
+        real, examples = partition_examples([q_fig, q_mc])
+        self.assertEqual(len(real), 1)
+        self.assertEqual(len(examples), 1)
+        self.assertEqual(examples[0]["answer"], "10")
+        validate_example(examples[0])
+
+    def test_dataset_rejects_id_shared_by_question_and_example(self):
+        q = dict(VALID_Q)  # id "q1"
+        e = dict(EX); e["id"] = "q1"
+        with self.assertRaises(ValidationError):
+            validate_dataset({"questions": [q], "examples": [e], "formulas": []})
 
 
 class TestBracketRepair(unittest.TestCase):

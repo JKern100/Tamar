@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import QuestionCard from '../components/QuestionCard'
+import Examples from '../modes/Examples'
 import { CitationView, SourceBadge } from '../ui'
 import type { Question } from '../types'
 
@@ -72,6 +73,17 @@ describe('figures', () => {
   it('renders no figure element when a question has none', () => {
     const { container } = render(<QuestionCard question={official} selected={null} onSelect={() => {}} reveal={false} />)
     expect(container.querySelector('.figure')).toBeNull()
+  })
+})
+
+describe('worked examples mode', () => {
+  it('lists an official example and reveals its full solution only on demand', () => {
+    render(<Examples />)
+    expect(screen.getByText(/משולש ישר-זווית/)).toBeInTheDocument()
+    expect(screen.queryByText(/פיתגורס/)).toBeNull() // solution hidden initially
+    fireEvent.click(screen.getByText('הצג פתרון'))
+    expect(screen.getByText(/פיתגורס/)).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /משולש/ })).toBeInTheDocument() // figure rendered
   })
 })
 

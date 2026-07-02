@@ -1,10 +1,17 @@
 import raw from './dataset.json'
-import type { Dataset, Domain, Question, FormulaEntry } from '../types'
+import type { Dataset, Domain, Question, FormulaEntry, WorkedExample } from '../types'
 
 export const dataset = raw as Dataset
 
 export const questions: Question[] = dataset.questions
 export const formulas: FormulaEntry[] = dataset.formulas
+export const examples: WorkedExample[] = dataset.examples ?? []
+
+export function exampleTopics(): string[] {
+  const set = new Set<string>()
+  for (const e of examples) set.add(e.topic)
+  return [...set].sort((a, b) => a.localeCompare(b, 'he'))
+}
 
 export function questionById(id: string): Question | undefined {
   return questions.find((q) => q.id === id)
