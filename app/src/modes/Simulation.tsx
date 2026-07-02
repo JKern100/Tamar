@@ -41,6 +41,7 @@ export default function Simulation() {
   const [answers, setAnswers] = useState<Record<string, number>>({})
   const [timeLeft, setTimeLeft] = useState(0)
   const [scores, setScores] = useState<{ label: string; correct: number; total: number }[]>([])
+  const [reviewAll, setReviewAll] = useState(false)
   const submitRef = useRef<() => void>(() => {})
 
   const preview = useMemo(() => buildSections(), [])
@@ -121,6 +122,9 @@ export default function Simulation() {
   if (phase === 'done') {
     const totalCorrect = scores.reduce((n, s) => n + s.correct, 0)
     const totalQ = scores.reduce((n, s) => n + s.total, 0)
+    const reviewed = sections.flatMap((s) => s.questions.map((q) => ({ q, section: s.label })))
+    const wrong = reviewed.filter(({ q }) => answers[q.id] !== q.correctIndex)
+    const shown = reviewAll ? reviewed : wrong
     return (
       <div className="stack">
         <div className="card center">
@@ -140,6 +144,34 @@ export default function Simulation() {
           </div>
           <button className="btn primary" style={{ marginTop: 14 }} onClick={() => setPhase('config')}>סימולציה חדשה</button>
         </div>
+
+        <div className="card">
+          <div className="spread">
+            <h3 style={{ margin: 0 }}>סקירת תשובות</h3>
+            <label className="row small" style={{ gap: 6, cursor: 'pointer' }}>
+              <input type="checkbox" checked={reviewAll} onChange={(e) => setReviewAll(e.target.checked)} />
+              הצגת כל השאלות (לא רק שגיאות)
+            </label>
+          </div>
+          <p className="small muted" style={{ margin: '8px 0 0' }}>
+            {wrong.length === 0
+              ? 'כל התשובות נכונות! 🎉'
+              : `${wrong.length} שאלות לתיקון. התשובה הנכונה מודגשת בירוק, והבחירה שלך באדום, עם הסבר ומקור לכל שאלה.`}
+          </p>
+          <p className="small faint" style={{ margin: '6px 0 0' }}>
+            כל השגיאות נשמרות גם ב“חזרה על טעויות” לתרגול חוזר בהמשך.
+          </p>
+        </div>
+
+        {shown.map(({ q, section }) => (
+          <div className="stack" key={q.id} style={{ gap: 6 }}>
+            <div className="row small" style={{ gap: 8 }}>
+              <span className="badge topic">{section}</span>
+              {answers[q.id] == null && <span className="badge bad">לא נענתה</span>}
+            </div>
+            <QuestionCard question={q} selected={answers[q.id] ?? null} onSelect={() => {}} reveal />
+          </div>
+        ))}
       </div>
     )
   }
