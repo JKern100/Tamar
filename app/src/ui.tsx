@@ -24,7 +24,7 @@ export function CitationView({ citation, verified }: { citation?: Citation; veri
     return <span className="citation unverified">⚠︎ לא אומת מתוך קובצי המקור</span>
   }
   const parts: string[] = [`מקור: ${citation.pdfTitle}`]
-  if (citation.section) parts.push(`פרק ${citation.section}`)
+  if (citation.section) parts.push(citation.section)
   if (citation.page) parts.push(`עמוד ${citation.page}`)
   if (citation.questionNumber != null) parts.push(`שאלה ${citation.questionNumber}`)
   return (
