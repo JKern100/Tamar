@@ -213,7 +213,52 @@ label.field > span { display: block; font-size: 13.5px; color: var(--text-soft);
 
 @media (max-width: 720px) {
   .app { flex-direction: column; }
-  .sidebar { width: 100%; height: auto; position: static; flex-direction: row; flex-wrap: wrap; border-inline-start: none; border-bottom: 1px solid var(--border); }
-  .brand { width: 100%; }
-  .content { padding: 20px 16px 60px; }
+
+  /* Nav becomes a slim, sticky, horizontally-scrollable chip bar pinned to the
+     top — content sits right under it and every section is one tap away. */
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    background: rgba(255, 255, 255, 0.94);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border-inline-start: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+  .sidebar .brand,
+  .sidebar .nav-sep,
+  .sidebar .faint { display: none; }
+
+  .nav-item {
+    flex: 0 0 auto;
+    width: auto;
+    white-space: nowrap;
+    gap: 7px;
+    padding: 9px 14px;
+    font-size: 13.5px;
+    border-radius: 999px;
+    background: var(--surface-2);
+  }
+  .nav-item.active { background: var(--primary-soft); color: var(--primary-dark); }
+  .nav-item .ico { font-size: 16px; width: auto; }
+
+  .content { max-width: 100%; padding: 16px 14px 40px; }
+
+  /* Comfortable tap targets on touch screens. */
+  .btn { min-height: 44px; }
+  .choice { padding: 14px 15px; }
+  h1 { font-size: 24px; }
+  .brand .title { font-size: 16px; }
 }
