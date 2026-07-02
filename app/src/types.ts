@@ -97,8 +97,13 @@ export interface Attempt {
   at: number
 }
 
+export type AiProvider = 'anthropic' | 'openai'
+
 export interface Settings {
+  aiProvider?: AiProvider
   anthropicApiKey?: string
-  aiModel?: string
+  openaiApiKey?: string
+  anthropicModel?: string
+  openaiModel?: string
   allowMixedSimulation?: boolean
 }

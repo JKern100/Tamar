@@ -1,22 +1,39 @@
 import { useState } from 'react'
 import { useStore, updateSettings, resetProgress } from '../store'
+import { Pill } from '../ui'
+import type { AiProvider } from '../types'
 
-const MODELS = [
+const ANTHROPIC_MODELS = [
   { id: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5 — מהיר וזול (מומלץ)' },
   { id: 'claude-sonnet-5', label: 'Claude Sonnet 5 — מאוזן' },
   { id: 'claude-opus-4-8', label: 'Claude Opus 4.8 — החזק ביותר' },
 ]
+const OPENAI_MODELS = [
+  { id: 'gpt-4o-mini', label: 'GPT-4o mini — מהיר וזול (מומלץ)' },
+  { id: 'gpt-4o', label: 'GPT-4o — חזק' },
+]
 
 export default function Settings() {
   const { settings } = useStore()
-  const [key, setKey] = useState(settings.anthropicApiKey ?? '')
+  const provider: AiProvider = settings.aiProvider ?? 'anthropic'
+  const [anthropicKey, setAnthropicKey] = useState(settings.anthropicApiKey ?? '')
+  const [openaiKey, setOpenaiKey] = useState(settings.openaiApiKey ?? '')
   const [saved, setSaved] = useState(false)
 
-  function save() {
-    updateSettings({ anthropicApiKey: key.trim() })
+  function setProvider(p: AiProvider) {
+    updateSettings({ aiProvider: p })
+  }
+
+  function saveKeys() {
+    updateSettings({ anthropicApiKey: anthropicKey.trim(), openaiApiKey: openaiKey.trim() })
     setSaved(true)
     setTimeout(() => setSaved(false), 1800)
   }
+
+  const models = provider === 'openai' ? OPENAI_MODELS : ANTHROPIC_MODELS
+  const currentModel = provider === 'openai'
+    ? settings.openaiModel ?? OPENAI_MODELS[0].id
+    : settings.anthropicModel ?? ANTHROPIC_MODELS[0].id
 
   return (
     <div className="stack">
@@ -25,23 +42,50 @@ export default function Settings() {
       <div className="card stack">
         <h3 style={{ margin: 0 }}>תכונות AI (רשות)</h3>
         <p className="small muted" style={{ margin: 0 }}>
-          כדי ליצור שאלות תרגול נוספות בעזרת AI, הזיני מפתח Anthropic API. המפתח נשמר במכשיר זה בלבד
-          (בדפדפן) ואינו נשלח לשום מקום מלבד ל-Anthropic. התכונה אינה נדרשת לשאר חלקי האפליקציה.
+          כדי ליצור שאלות תרגול נוספות בעזרת AI, בחרי ספק והזיני מפתח API. המפתח נשמר במכשיר זה בלבד
+          (בדפדפן) ואינו נשלח לשום מקום מלבד לספק שבחרת. התכונה אינה נדרשת לשאר חלקי האפליקציה.
         </p>
+
         <label className="field">
-          <span>מפתח Anthropic API</span>
-          <input className="input" type="password" placeholder="sk-ant-..." value={key} onChange={(e) => setKey(e.target.value)} />
+          <span>ספק ה-AI</span>
+          <div className="pill-tabs">
+            <Pill active={provider === 'anthropic'} onClick={() => setProvider('anthropic')}>Claude (Anthropic)</Pill>
+            <Pill active={provider === 'openai'} onClick={() => setProvider('openai')}>ChatGPT (OpenAI)</Pill>
+          </div>
         </label>
+
+        {provider === 'anthropic' ? (
+          <label className="field">
+            <span>מפתח Anthropic API</span>
+            <input className="input" type="password" placeholder="sk-ant-..." value={anthropicKey} onChange={(e) => setAnthropicKey(e.target.value)} />
+          </label>
+        ) : (
+          <label className="field">
+            <span>מפתח OpenAI API</span>
+            <input className="input" type="password" placeholder="sk-..." value={openaiKey} onChange={(e) => setOpenaiKey(e.target.value)} />
+          </label>
+        )}
+
         <label className="field">
           <span>מודל</span>
-          <select className="input" value={settings.aiModel ?? MODELS[0].id} onChange={(e) => updateSettings({ aiModel: e.target.value })}>
-            {MODELS.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
+          <select
+            className="input"
+            value={currentModel}
+            onChange={(e) =>
+              updateSettings(provider === 'openai' ? { openaiModel: e.target.value } : { anthropicModel: e.target.value })
+            }
+          >
+            {models.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
           </select>
         </label>
+
         <div className="row">
-          <button className="btn primary" onClick={save}>שמירה</button>
+          <button className="btn primary" onClick={saveKeys}>שמירת מפתחות</button>
           {saved && <span className="badge ok">✓ נשמר</span>}
         </div>
+        <p className="small faint" style={{ margin: 0 }}>
+          מפתח Anthropic מתקבל ב-console.anthropic.com · מפתח OpenAI מתקבל ב-platform.openai.com
+        </p>
       </div>
 
       <div className="card stack">

@@ -31,4 +31,18 @@ describe('AI similar-question generation', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ content: [{ text: '{"choices":["a"]}' }] }) }))
     await expect(generateSimilarQuestion(src, { anthropicApiKey: 'key' })).rejects.toThrow()
   })
+
+  it('uses the OpenAI endpoint when provider is openai', async () => {
+    const payload = { choices: [{ message: { content: JSON.stringify({ stem: 'new', choices: ['w', 'x', 'y', 'z'], correctIndex: 1, explanation: 'because', topic: 'Vocabulary', difficulty: 'medium' }) } }] }
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => payload })
+    vi.stubGlobal('fetch', fetchMock)
+    const q = await generateSimilarQuestion(src, { aiProvider: 'openai', openaiApiKey: 'key' })
+    expect(q.origin).toBe('ai')
+    expect(q.correctIndex).toBe(1)
+    expect(String(fetchMock.mock.calls[0][0])).toContain('api.openai.com')
+  })
+
+  it('refuses without an OpenAI key when provider is openai', async () => {
+    await expect(generateSimilarQuestion(src, { aiProvider: 'openai' })).rejects.toThrow(/OpenAI/)
+  })
 })
