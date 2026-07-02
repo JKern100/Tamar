@@ -29,9 +29,9 @@ export default function EasterEgg({ onClose }: { onClose: () => void }) {
         {picked && (
           <div className="egg-win">
             <div style={{ fontSize: 36 }}>🎉 💙 🎉</div>
-            <strong style={{ fontSize: 17 }}>כל תשובה נכונה!</strong>
+            <strong style={{ fontSize: 17 }}>כל התשובות נכונות</strong>
             <p style={{ margin: '6px 0 0' }}>
-              אבא שעיה הכי אוהב אותך וגאה בך. בהצלחה בפסיכומטרי — את תצליחי! 💪
+              אבא הכי אוהב אותך וגאה בך. בהצלחה בפסיכומטרי — את תצליחי! 💪
             </p>
           </div>
         )}

@@ -94,7 +94,7 @@ describe('hidden surprise', () => {
     expect(screen.getByText('מי האבא הטוב ביותר בעולם?')).toBeInTheDocument()
     expect(screen.getAllByText('אבא שעיה')).toHaveLength(4)
     fireEvent.click(screen.getAllByText('אבא שעיה')[0])
-    expect(screen.getByText('כל תשובה נכונה!')).toBeInTheDocument()
+    expect(screen.getByText('כל התשובות נכונות')).toBeInTheDocument()
   })
 })
 
