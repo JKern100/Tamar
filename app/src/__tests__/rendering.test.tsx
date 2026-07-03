@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import QuestionCard from '../components/QuestionCard'
 import Examples from '../modes/Examples'
 import EasterEgg from '../components/EasterEgg'
-import { CitationView, SourceBadge } from '../ui'
+import { CitationView, SourceBadge, MathText } from '../ui'
 import type { Question } from '../types'
 
 const official: Question = {
@@ -95,6 +95,22 @@ describe('hidden surprise', () => {
     expect(screen.getAllByText('אבא שעיה')).toHaveLength(4)
     fireEvent.click(screen.getAllByText('אבא שעיה')[0])
     expect(screen.getByText('כל התשובות נכונות')).toBeInTheDocument()
+  })
+})
+
+describe('MathText (bidi-safe equations)', () => {
+  it('isolates each equation as an LTR run and preserves the full text', () => {
+    const { container } = render(<p><MathText>{'היתר d=√2·c ולכן b²=7a².'}</MathText></p>)
+    const spans = container.querySelectorAll('.ltr-math')
+    expect(spans.length).toBe(2)
+    expect(spans[0].textContent).toBe('d=√2·c')
+    expect(spans[1].textContent).toBe('b²=7a²') // trailing period stays in the Hebrew flow
+    expect(container.textContent).toBe('היתר d=√2·c ולכן b²=7a².')
+  })
+  it('leaves pure-Hebrew text untouched', () => {
+    const { container } = render(<p><MathText>{'שלום עולם'}</MathText></p>)
+    expect(container.querySelectorAll('.ltr-math').length).toBe(0)
+    expect(container.textContent).toBe('שלום עולם')
   })
 })
 

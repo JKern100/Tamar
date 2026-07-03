@@ -1,5 +1,5 @@
 import type { Question } from '../types'
-import { SourceBadge, AiBanner, CitationView } from '../ui'
+import { SourceBadge, AiBanner, CitationView, MathText } from '../ui'
 import { DIFFICULTY_HE } from '../types'
 
 interface Props {
@@ -34,7 +34,7 @@ export default function QuestionCard({ question: q, selected, onSelect, reveal, 
       {isAi && <AiBanner />}
 
       <div style={{ direction: dir, fontSize: 17, fontWeight: 600, marginBottom: 16, unicodeBidi: 'plaintext' }}>
-        {q.stem}
+        <MathText>{q.stem}</MathText>
       </div>
 
       {q.figure && (
@@ -83,7 +83,7 @@ export default function QuestionCard({ question: q, selected, onSelect, reveal, 
                   <span className="badge ai">🤖 {q.explanation.basedOnOfficial ? 'הסבר שנוצר על ידי AI על בסיס חומר המקור' : 'הסבר שנוצר על ידי AI'}</span>
                 )}
               </div>
-              <p style={{ margin: 0, unicodeBidi: 'plaintext' }}>{q.explanation.text}</p>
+              <p style={{ margin: 0, unicodeBidi: 'plaintext' }}><MathText>{q.explanation.text}</MathText></p>
             </div>
           )}
           {!quiet && q.origin === 'official' && (

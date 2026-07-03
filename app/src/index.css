@@ -211,6 +211,9 @@ label.field > span { display: block; font-size: 13.5px; color: var(--text-soft);
 }
 .figure svg { max-width: 100%; height: auto; }
 
+/* Left-to-right math run inside RTL Hebrew text (keeps equations from scrambling). */
+.ltr-math { unicode-bidi: isolate; direction: ltr; }
+
 /* Hidden personal surprise (buried behind a secret tap). */
 .wave { cursor: pointer; display: inline-block; -webkit-user-select: none; user-select: none; }
 .egg-overlay {

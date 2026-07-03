@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { examples, exampleTopics } from '../content'
-import { SourceBadge, CitationView, Pill, Empty } from '../ui'
+import { SourceBadge, CitationView, Pill, Empty, MathText } from '../ui'
 import { DIFFICULTY_HE } from '../types'
 import type { WorkedExample } from '../types'
 
@@ -76,7 +76,7 @@ function ExampleCard({ e }: { e: WorkedExample }) {
         <SourceBadge origin={e.origin} />
       </div>
 
-      <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 14, unicodeBidi: 'plaintext' }}>{e.stem}</div>
+      <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 14, unicodeBidi: 'plaintext' }}><MathText>{e.stem}</MathText></div>
 
       {e.figure && (
         <div
@@ -91,10 +91,10 @@ function ExampleCard({ e }: { e: WorkedExample }) {
         <button className="btn primary" onClick={() => setOpen(true)}>הצג פתרון</button>
       ) : (
         <div>
-          <div className="badge ok" style={{ fontSize: 14, unicodeBidi: 'plaintext' }}>תשובה: {e.answer}</div>
+          <div className="badge ok" style={{ fontSize: 14, unicodeBidi: 'plaintext' }}>תשובה: <MathText>{e.answer}</MathText></div>
           <div className="card" style={{ marginTop: 12, background: 'var(--surface-2)' }}>
             <strong>פתרון</strong>
-            <p style={{ margin: '6px 0 0', unicodeBidi: 'plaintext' }}>{e.explanation.text}</p>
+            <p style={{ margin: '6px 0 0', unicodeBidi: 'plaintext' }}><MathText>{e.explanation.text}</MathText></p>
           </div>
           <div style={{ marginTop: 12 }}>
             <CitationView citation={e.citation} verified={e.verified} />
